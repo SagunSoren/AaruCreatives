@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
+import { Cormorant_Garamond } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+export const poppins = Poppins({
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+export const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"], // This ensures italic variants are loaded
+  variable: "--font-cormorant", // Define a CSS variable for Tailwind
 });
 
 export const metadata: Metadata = {
@@ -25,7 +29,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${poppins.className} ${cormorant.variable} h-full antialiased max-w-xl mx-auto`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
