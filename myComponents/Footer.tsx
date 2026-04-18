@@ -13,8 +13,8 @@ const Footer = () => {
         <p className="text-[#8a6b58] text-xs">
           Every piece tells a story — yours
         </p>
-        <p className="text-[#8a6b58] py-4">Contact Us</p>
-        <p className="text-[#8a6b58] text-xs pb-2">Powered by soren.in</p>
+        {/* <p className="text-[#8a6b58] py-4">Contact Us</p> */}
+        <p className="text-[#8a6b58] text-xs pb-2 pt-4">Powered by soren.in</p>
       </div>
     </div>
   );
