@@ -1,11 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageCard from "./Cards/ImageCard";
-import { handmadeItems } from "@/db/data.js";
+// import { handmadeItems } from "@/db/data.js";
 import { categories } from "@/db/data.js";
+import axios from "axios";
 
 const Explore = () => {
-  const allItems = handmadeItems;
+  // const allItems = handmadeItems;
+  const [products, setProducts] = useState([]);
+
+  const fetchProducts = async () => {
+    const response = await axios.get("/api/product");
+    setProducts(response.data.products);
+    console.log(response.data.products);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // 1. New State for Category
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -15,8 +27,8 @@ const Explore = () => {
   // 2. Filter logic: Filter items based on category FIRST
   const filteredItems =
     selectedCategory === "all"
-      ? allItems
-      : allItems.filter(
+      ? products
+      : products.filter(
           (item) =>
             item.category.toLowerCase() === selectedCategory.toLowerCase(),
         );

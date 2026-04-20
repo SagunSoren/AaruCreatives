@@ -15,11 +15,11 @@ const ImageCard = ({ data }) => {
     <Drawer>
       {/* The Card acts as the Trigger */}
       <DrawerTrigger asChild>
-        <div className="shadow-md rounded-2xl overflow-hidden bg-white cursor-pointer active:scale-95 transition-transform">
+        <div className="shadow-md rounded-2xl h-54 overflow-hidden bg-white cursor-pointer active:scale-95 transition-transform">
           <div className="h-40 w-full relative group">
             <Image
-              src={data?.imageSrc}
-              alt={data.name}
+              src={data?.image}
+              alt={data.title}
               fill
               loading="eager"
               sizes="(max-width: 1024px) 50vw, 25vw"
@@ -32,7 +32,7 @@ const ImageCard = ({ data }) => {
             )}
           </div>
           <div className="p-2">
-            <p className="text-sm font-medium">{data.name}</p>
+            <p className="text-sm font-medium">{data.title}</p>
             <p className="text-[#b97358] text-sm">₹{data.price}</p>
           </div>
         </div>
@@ -44,8 +44,8 @@ const ImageCard = ({ data }) => {
           <div className="relative w-full">
             <div className="relative w-full h-60 overflow-hidden rounded-3xl shadow-sm">
               <Image
-                src={data?.imageSrc}
-                alt={data.name}
+                src={data?.image}
+                alt={data.title}
                 fill
                 priority // Ensures this image loads fast when drawer opens
                 className="object-cover"
@@ -55,7 +55,7 @@ const ImageCard = ({ data }) => {
           </div>
           <DrawerHeader className="px-0">
             <DrawerTitle className="text-xl text-left font-cormorant font-semibold text-gray-800">
-              {data.name}
+              {data.title}
             </DrawerTitle>
             <DrawerDescription className="text-[#b97358] text-lg text-left font-medium">
               ₹{data.price}
@@ -71,7 +71,7 @@ const ImageCard = ({ data }) => {
 
           <DrawerFooter className="px-0 pt-4">
             <a
-              href={`https://wa.me/+919111270747?text=Hi, I'm interested in the ${data.name}`}
+              href={`https://wa.me/+919111270747?text=Hi, I'm interested in the ${data.title}`}
               className="w-full bg-[#25D366] text-white py-4 rounded-2xl font-medium flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-colors"
             >
               Order on WhatsApp
