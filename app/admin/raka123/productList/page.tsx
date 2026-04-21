@@ -33,7 +33,7 @@ const page = () => {
       <div className="w-full overflow-x-hidden">
         <table className="w-full text-sm text-gray-500">
           <thead className="items-center gap-3 flex">
-            <td className="px-6 py-4 w-20 ">Name</td>
+            <td className=" py-4 w-20 ">Name</td>
             <td className="py-4 w-20 ">Price</td>
             <td className=" py-4 cursor-pointer ">Action</td>
           </thead>
