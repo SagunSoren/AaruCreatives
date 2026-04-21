@@ -8,11 +8,14 @@ import axios from "axios";
 const Explore = () => {
   // const allItems = handmadeItems;
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
+    setLoading(true);
     const response = await axios.get("/api/product");
     setProducts(response.data.products);
-    console.log(response.data.products);
+    // console.log(response.data.products);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -70,7 +73,7 @@ const Explore = () => {
       <div className="px-4 text-[#ba765a]">
         <p>Showing {filteredItems.length} Products</p>
       </div>
-      {/* Grid Displaying Current Items */}
+      {/* Grid Displaying Current Items
       <div className="grid  grid-cols-2 gap-2 max-lg:px-2 px-10 min-h-[400px]">
         {currentItems.length > 0 ? (
           currentItems.map((item, index) => (
@@ -78,6 +81,24 @@ const Explore = () => {
           ))
         ) : (
           <div className="col-span-4 text-center py-20 text-gray-400">
+            No items found in this category.
+          </div>
+        )}
+      </div> */}
+      <div className="grid grid-cols-2 gap-2 max-lg:px-2 px-10 min-h-[400px]">
+        {loading ? (
+          // 1. WHAT TO SHOW WHILE WAITING
+          <div className="col-span-2 flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b97358]"></div>
+          </div>
+        ) : currentItems.length > 0 ? (
+          // 2. SHOW DATA
+          currentItems.map((item, index) => (
+            <ImageCard key={index} data={item} />
+          ))
+        ) : (
+          // 3. SHOW EMPTY STATE (Only after loading is finished)
+          <div className="col-span-2 text-center py-20 text-gray-400">
             No items found in this category.
           </div>
         )}

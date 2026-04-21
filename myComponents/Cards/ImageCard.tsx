@@ -16,14 +16,14 @@ const ImageCard = ({ data }) => {
       {/* The Card acts as the Trigger */}
       <DrawerTrigger asChild>
         <div className="shadow-md rounded-2xl h-54 overflow-hidden bg-white cursor-pointer active:scale-95 transition-transform">
-          <div className="h-40 w-full relative group">
+          <div className="h-40 w-full relative ">
             <Image
               src={data?.image}
               alt={data.title}
               fill
               loading="eager"
               sizes="(max-width: 1024px) 50vw, 25vw"
-              className="object-cover transition-all duration-300 group-hover:scale-110"
+              className="object-cover transition-all duration-300 "
             />
             {data.isNew && (
               <div className="absolute text-white rounded-xl top-2 bg-[#c5856a] left-2 px-2 uppercase text-xs py-1 tracking-wide">
@@ -72,7 +72,7 @@ const ImageCard = ({ data }) => {
           <DrawerFooter className="px-0 pt-4">
             <a
               href={`https://wa.me/+919111270747?text=Hi, I'm interested in the ${data.title}`}
-              className="w-full bg-[#25D366] text-white py-4 rounded-2xl font-medium flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-colors"
+              className="w-full bg-[#25D366] text-white py-4 rounded-2xl font-medium flex items-center justify-center gap-2  transition-colors"
             >
               Order on WhatsApp
             </a>
