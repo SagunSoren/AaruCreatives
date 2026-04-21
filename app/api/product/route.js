@@ -128,3 +128,10 @@ export async function DELETE(request) {
         return NextResponse.json({ msg: "Error deleting product" }, { status: 500 });
     }
 }
+
+export const config = {
+  api: {
+    bodyParser: false, // Disabling bodyParser is sometimes necessary for FormData
+    sizeLimit: '10mb', // Set this to 10mb or higher
+  },
+};
