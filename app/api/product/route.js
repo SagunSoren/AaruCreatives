@@ -54,8 +54,16 @@ export async function GET(request) {
 //Post Products
 export async function POST(request) {
     try {
+
+        await ConnectDB();
+
+
         const formData = await request.formData();
         const image = formData.get('image');
+     
+        if (!image) {
+        return NextResponse.json({ success: false, msg: "No image provided" }, { status: 400 });
+    }
 
         // 1. Convert image to Buffer
         const imageByteData = await image.arrayBuffer();
