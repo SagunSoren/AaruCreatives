@@ -3,6 +3,8 @@ import Explore from "@/myComponents/Explore";
 import Footer from "@/myComponents/Footer";
 import Hero from "@/myComponents/Hero";
 import Navbar from "@/myComponents/Navbar";
+import ScrollToTop from "@/myComponents/ScrolltoTop";
+import WhatsAppButton from "@/myComponents/Whatsapp";
 
 const page = () => {
   return (
@@ -12,6 +14,8 @@ const page = () => {
       <Carousel />
       <Explore />
       <Footer />
+      <ScrollToTop />
+      <WhatsAppButton />
     </div>
   );
 };

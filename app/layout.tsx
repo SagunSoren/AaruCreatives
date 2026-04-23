@@ -34,8 +34,7 @@ export default function RootLayout({
       className={`${poppins.className} ${cormorant.variable} h-full antialiased max-w-xl mx-auto`}
     >
       <body className="min-h-full flex flex-col">
-        <ScrollToTop />
-        <WhatsAppButton />
+       
         {children}
       </body>
     </html>

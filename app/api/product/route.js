@@ -3,6 +3,9 @@ const {NextResponse}  = require("next/server")
 const cloudinary = require('cloudinary').v2
 import productModel from "../../../lib/models/productModel";
 
+const LoadDB = async ()=>{
+    await ConnectDB();
+}
 
 // Configuration
 cloudinary.config({ 
@@ -11,10 +14,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET 
 });
 
-const LoadDB = async ()=>{
-    await ConnectDB();
 
-}
 
 LoadDB();
 
@@ -81,6 +81,7 @@ export async function POST(request) {
         const productData = {
             title: `${formData.get('title')}`,
             price: `${formData.get('price')}`,
+            quantity:`${formData.get('quantity')}`,
             category: `${formData.get('category')}`,
             image: uploadResponse.secure_url, // This is your public link
         };
@@ -94,18 +95,10 @@ export async function POST(request) {
     }
 }
 
-//creating API Endpoint to delete product
-
-// export async function DELETE(request){
-//     const id = await request.nextUrl.searchParams.get('id');
-//     const product = await productModel.findById(id); 
-//     fs.unlink(`./public${product.image}`,()=>{});
-//     await productModel.findByIdAndDelete(id);
-//     return NextResponse.json({msg:"Blog Deleted"});
-// }
 
 export async function DELETE(request) {
     try {
+        await ConnectDB();
         const id = await request.nextUrl.searchParams.get('id');
         const product = await productModel.findById(id);
 
@@ -116,13 +109,14 @@ export async function DELETE(request) {
         // 1. Extract Public ID from the URL
         // Example URL: https://res.cloudinary.com/name/image/upload/v1/folder/image_id.jpg
         // We need: "folder/image_id"
-        const imageUrl = product.image;
-        const urlParts = imageUrl.split('/');
-        const fileNameWithExtension = urlParts[urlParts.length - 1]; // "image_id.jpg"
-        const publicIdWithoutExtension = fileNameWithExtension.split('.')[0]; // "image_id"
+        // const imageUrl = product.image;
+        // const urlParts = imageUrl.split('/');
+        // const fileNameWithExtension = urlParts[urlParts.length - 1]; // "image_id.jpg"
+        // const publicIdWithoutExtension = fileNameWithExtension.split('.')[0]; // "image_id"
         
         // If you used a folder (e.g., 'products'), you need to include it:
-        const publicId = `products/${publicIdWithoutExtension}`; 
+        // const publicId = `products/${publicIdWithoutExtension}`; 
+        const publicId = `products/${product.image.split('/').pop().split('.')[0]}`;
 
         // 2. Delete from Cloudinary
         await cloudinary.uploader.destroy(publicId);
@@ -137,9 +131,52 @@ export async function DELETE(request) {
     }
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Disabling bodyParser is sometimes necessary for FormData
-    sizeLimit: '10mb', // Set this to 10mb or higher
-  },
-};
+export async function PUT(request) {
+    try {
+        await ConnectDB();
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get("id");
+      
+        const formData = await request.formData();
+        
+        // 1. Prepare the update object with text fields
+        const updateData = {
+            title: formData.get("title"),
+            price: formData.get("price"),
+            quantity: formData.get("quantity"),
+            category: formData.get("category"),
+        };
+
+        const image = formData.get('image');
+
+        // 2. Check if 'image' is a file (not a string or null)
+        if (image && typeof image !== "string") {
+            // A new image file was uploaded
+            const imageByteData = await image.arrayBuffer();
+            const buffer = Buffer.from(imageByteData);
+            const base64Image = `data:${image.type};base64,${buffer.toString('base64')}`;
+
+            // Optional: Delete the OLD image from Cloudinary first to save space
+            const oldProduct = await productModel.findById(id);
+            if (oldProduct && oldProduct.image) {
+                const publicId = `products/${oldProduct.image.split('/').pop().split('.')[0]}`;
+                await cloudinary.uploader.destroy(publicId);
+            }
+
+            // Upload the NEW image
+            const uploadResponse = await cloudinary.uploader.upload(base64Image, {
+                folder: "products",
+            });
+            updateData.image = uploadResponse.secure_url;
+        }
+
+        // 3. Update the document with updateData
+        // Using {new: true} returns the updated document
+        await productModel.findByIdAndUpdate(id, updateData);
+      
+        return NextResponse.json({ success: true, msg: "Product Updated Successfully" });
+    } catch (error) {
+        console.error("Update Error:", error);
+        return NextResponse.json({ success: false, msg: "Update Failed" }, { status: 500 });
+    }
+}
